@@ -6,23 +6,33 @@ from django.db.models import Q
 
 class AuthTokenSerializer(serializers.Serializer):
     email_or_username = serializers.CharField()
-    password = serializers.CharField(style={'input_type': 'password'}, trim_whitespace=False)
+    password = serializers.CharField(
+        style={"input_type": "password"}, trim_whitespace=False
+    )
 
     def validate(self, attrs):
-        email_or_username = attrs.get('email_or_username')
-        password = attrs.get('password')
+        email_or_username = attrs.get("email_or_username")
+        password = attrs.get("password")
 
         if email_or_username and password:
-            user = User.objects.filter(
-                Q(username=email_or_username) | Q(email=email_or_username)
-            ).distinct().first()
+            user = (
+                User.objects.filter(
+                    Q(username=email_or_username) | Q(email=email_or_username)
+                )
+                .distinct()
+                .first()
+            )
             if user and user.check_password(password):
-                attrs['user'] = user
+                attrs["user"] = user
                 return attrs
             else:
-                raise serializers.ValidationError('Unable to log in with provided credentials.')
+                raise serializers.ValidationError(
+                    "Unable to log in with provided credentials."
+                )
         else:
-            raise serializers.ValidationError('Must include "email_or_username" and "password".')
+            raise serializers.ValidationError(
+                'Must include "email_or_username" and "password".'
+            )
 
 
 class UserRegiserSerializer(serializers.Serializer):
