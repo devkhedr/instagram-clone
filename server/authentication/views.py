@@ -1,9 +1,9 @@
 from knox.auth import AuthToken
 from rest_framework import status
-from rest_framework.authtoken.serializers import AuthTokenSerializer
+# from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from .serializers import UserRegiserSerializer
+from .serializers import UserRegiserSerializer, AuthTokenSerializer
 from users.serializers import UserSerializer
 from users.models import User
 from .permissions import IsNotAuthenticated
