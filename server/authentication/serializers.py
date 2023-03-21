@@ -41,11 +41,16 @@ class UserRegiserSerializer(serializers.Serializer):
     password = serializers.CharField()
     confirm_password = serializers.CharField()
 
+    
     def validate_email(self, email):
         existing = User.objects.filter(email=email).first()
-        if existing:
-            raise ValidationError("This email address is already in use.")
+        if not existing:
+            return email
+        if existing.is_verified:
+            raise ValidationError("this email address is already exist")
+        existing.delete()
         return email
+
 
     def validate_username(self, username):
         if User.objects.filter(username=username).exists():
