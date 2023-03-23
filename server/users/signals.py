@@ -11,6 +11,7 @@ def delete_unverified_user(sender, instance, **kwargs):
         time_difference = timezone.now() - instance.created
         if time_difference.total_seconds() > 86400:
             users_to_delete = User.objects.filter(
-                Q(is_verified=False) & Q(created__lte=timezone.now() - timezone.timedelta(days=1))
+                Q(is_verified=False)
+                & Q(created__lte=timezone.now() - timezone.timedelta(days=1))
             )
             users_to_delete.delete()
